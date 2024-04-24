@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Studio23.SS2.Cutscenesystem.Data;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -15,8 +13,17 @@ namespace Studio23.SS2.Cutscenesystem.Core
     {
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
         {
-           
-            return ScriptPlayable<CutsceneMixer>.Create(graph, inputCount);
+            var mixerPlayable = ScriptPlayable<CutscenePlayableBehaviour>.Create(graph, inputCount);
+            CutscenePlayableBehaviour behaviour = mixerPlayable.GetBehaviour();
+
+            // Initialize with the bound GameObject, assuming it has a CanvasGroup
+            GameObject trackBinding = go.GetComponent<PlayableDirector>().GetGenericBinding(this) as GameObject;
+            if (trackBinding != null)
+            {
+                behaviour.Initialize(trackBinding, 0f, 1f);  // Set default alpha values or manage dynamically
+            }
+
+            return mixerPlayable;
         }
     }
 }
