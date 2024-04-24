@@ -1,85 +1,64 @@
-using System.Collections.Generic;
 using System.Linq;
+using Studio23.SS2.Cutscenesystem.Data;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
-using UnityEngine.UI;
+
 
 namespace Studio23.SS2.Cutscenesystem.Core
 {
     public class CutsceneController : MonoBehaviour
     {
-        public static CutsceneController Instance;
-        public List<Image> Pages;
-        public List<ActivationTrack> ActivationTracks;
         public PlayableDirector Director;
-        public float DampingValue = 0.1f;
+        private readonly float DampingValue = 0.1f;
 
-        private bool isPaused = false;
+        private bool _isPaused;
 
-        void Awake()
+        /// <summary>
+        /// Used to advance pages, skipcount parameter used to advance to the selected page column if want to skip to that page column
+        /// </summary>
+        /// <param name="skipCount"></param>
+        public void AdvancePage(int skipCount)
         {
-            Instance = this;
-        }
-
-        void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Space)) // Assuming space bar is the skip key
-            {
-                Debug.Log("Skipped pressed");
-                Skip();
-            }
-        }
-
-        [ContextMenu("Skip")]
-        private void Skip()
-        {
-            if (isPaused)
+            if (_isPaused)
             {
                 Director.Play();
-                isPaused = false;
+                _isPaused = false;
                 Debug.Log("Timeline resumed");
             }
             else
             {
                 // Access the timeline asset from the director
-                TimelineAsset timeline = Director.playableAsset as TimelineAsset;
+                var timeline = Director.playableAsset as TimelineAsset;
                 if (timeline == null) return;
 
-                double currentTime = Director.time;
-
-                // Get all tracks from the timeline
+                var currentTime = Director.time;
                 var tracks = timeline.GetOutputTracks();
+                var cutSceneTracks = tracks.OfType<CutsceneTrack>().ToList();
 
-                // Filter to find all Activation Tracks
-
-                var activationTracks = tracks.OfType<ActivationTrack>().ToList();
-                
-               
-
-                foreach (var track in activationTracks)
+                foreach (var track in cutSceneTracks)
                 {
-                    bool shouldSkip = false;
-                    foreach (var clip in track.GetClips())
+                    if(track.start > currentTime || track.end < currentTime) continue;
+
+                    var shouldSkip = false;
+                    var clips = track.GetClips().ToList();
+                    int currentClip = skipCount == -1? clips.Count:skipCount;
+
+                    Director.time = track.end - DampingValue;
+                    Director.Evaluate();
+                    shouldSkip = true;
+
+
+                    for (int i = 0; i < currentClip; i++)
                     {
-                        if (clip.start <= currentTime && clip.end > currentTime)
-                        {
-                            // Set time to the end of the current track's duration
-                            Debug.Log("Current Time: " + Director.time);
-                            Director.time = track.end - DampingValue;
-                            
-                            Debug.Log("Current Time After Calculation: " + Director.time);
-                            shouldSkip = true;
-                            Debug.Log("Activation Track found: " + track.name);
-                            break; // Break since we found the active clip
-                        }
+                        CutsceneClip cut = clips[i].asset as CutsceneClip;
+                        cut.CutsceneBehaviour.ForceAlpha();
                     }
+
                     if (shouldSkip)
                     {
                         Director.Pause();
-                        ForceUpdateAlpha(1);
-                        Director.Evaluate();
-                        isPaused = true;
+                        _isPaused = true;
                         Debug.Log($"Director time now {Director.time} and track duration {track.duration}");
                         break; // Break since we've handled the skip for the active track
                     }
@@ -87,21 +66,18 @@ namespace Studio23.SS2.Cutscenesystem.Core
             }
         }
 
-
-        public void ForceUpdateAlpha(float alpha)
+        /// <summary>
+        /// Skip to the whole timeline track
+        /// </summary>
+        public void SkipPage()
         {
-            foreach (var page in Pages)
+            var timelineAsset = Director.playableAsset as TimelineAsset;
+            if (timelineAsset != null)
             {
-                page.GetComponent<CanvasGroup>().alpha = alpha;
+                var markers = timelineAsset.markerTrack.GetMarkers().ToArray();
+                Director.time = timelineAsset.duration;
             }
         }
-
-        public void UpdateSpriteImageData(double alpha, int index)
-        {
-            var dd = Pages[index].GetComponent<CanvasGroup>();
-            dd.alpha = (float)alpha;
-        }
-
     }
 
 }

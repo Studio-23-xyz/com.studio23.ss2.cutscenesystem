@@ -3,24 +3,42 @@ using UnityEngine.Playables;
 
 namespace Studio23.SS2.Cutscenesystem.Core
 {
-    public class CutscenePlayableBehaviour : PlayableBehaviour
+    internal class CutscenePlayableBehaviour : PlayableBehaviour
     {
-        
-        public int Column;
+        public GameObject Page;
+        public float StartAlpha;
+        public float EndAlpha;
+        internal float CurrentAlpha;
 
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
-            var cutSceneData = playerData as CutsceneController;
-            if(cutSceneData == null)
-                return;
-            
-            double duration = playable.GetDuration();
-            double time = playable.GetTime();
-            float progress = (float)(time / duration);
-            float alpha = Mathf.Lerp(0, 1, progress);
-
-            CutsceneController.Instance.UpdateSpriteImageData(alpha,Column);
+            if (Page != null)
+            {
+                float progress = (float)(playable.GetTime() / playable.GetDuration());
+                CurrentAlpha = Mathf.Lerp(StartAlpha, EndAlpha, progress);
+                var renderer = Page.GetComponent<CanvasGroup>();
+                if (renderer != null)
+                {
+                    renderer.alpha = CurrentAlpha;
+                }
+            }
         }
+        public void Initialize(GameObject targetPage, float startAlpha, float endAlpha)
+        {
+            Page = targetPage;
+            StartAlpha = startAlpha;
+            EndAlpha = endAlpha;
+            Page.GetComponent<CanvasGroup>().alpha = startAlpha;
+        }
+
+        /// <summary>
+        /// Make the remaining pages transparency to Maximum
+        /// </summary>
+        public void ForceAlpha()
+        {
+            Page.GetComponent<CanvasGroup>().alpha = 1f;
+        }
+
     }
 
 }
