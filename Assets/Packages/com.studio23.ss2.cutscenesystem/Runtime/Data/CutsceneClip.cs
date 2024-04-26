@@ -26,6 +26,7 @@ namespace Studio23.SS2.Cutscenesystem.Data
             behaviour.StartAlpha = StartAlpha;
             behaviour.EndAlpha = EndAlpha;
             CutsceneBehaviour = behaviour;
+            CutsceneBehaviour.CurrentAlpha = StartAlpha;
             return playable;
         }
     }

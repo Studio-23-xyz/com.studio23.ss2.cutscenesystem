@@ -64,7 +64,6 @@ namespace Studio23.SS2.Cutscenesystem.Core
 
                     if (shouldSkip)
                     {
-                        Director.Pause();
                         _isPaused = true;
                         Debug.Log($"Director time now {Director.time} and track duration {track.duration}");
                         break; // Break since we've handled the skip for the active track
