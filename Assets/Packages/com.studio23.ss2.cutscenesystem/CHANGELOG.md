@@ -12,3 +12,7 @@ All notable changes to this Unity package will be documented in this file.
 + Defined various text styles in Default Style Sheet.asset.
 
 
+## [v1.0.0] - 2024-03-26
+
++ Modified Cutscene Controller Singleton 
++ Updated Comic Pages
