@@ -9,10 +9,17 @@ namespace Studio23.SS2.Cutscenesystem.Core
 {
     public class CutsceneController : MonoBehaviour
     {
+        public static CutsceneController instance;
         public PlayableDirector Director;
         private readonly float DampingValue = 0.1f;
 
         private bool _isPaused;
+
+        void Awake()
+        {
+            instance = this;
+        }
+
 
         /// <summary>
         /// Used to advance pages, skipcount parameter used to advance to the selected page column if want to skip to that page column
