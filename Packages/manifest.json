@@ -48,7 +48,8 @@
       "url": "https://package.openupm.com",
       "scopes": [
         "com.studio23.ss2.upmassistant",
-        "com.cysharp.unitask"
+        "com.cysharp.unitask",
+        "com.thisotherthing.uishapeskit"
       ]
     }
   ]
