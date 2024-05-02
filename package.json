@@ -1,0 +1,36 @@
+{
+  "name": "com.studio23.ss2.cutscenesystem",
+  "version": "1.0.2",
+  "displayName": "com.studio23.ss2.cutscenesystem",
+  "description": "Cutscenesystem is a utility package where cutscene will display using comic strip style. Unity timeline is being used for the system\r",
+  "unity": "2022.3",
+  "unityRelease": "14f1",
+  "documentationUrl": "https://studio-23-xyz.github.io/com.studio23.ss2.cutscenesystem/index.html",
+  "changelogUrl": "https://studio-23-xyz.github.io/com.studio23.ss2.cutscenesystem/Assets/Packages/com.studio23.ss2.cutscenesystem/CHANGELOG.html",
+  "licensesUrl": "https://studio-23-xyz.github.io/com.studio23.ss2.cutscenesystem/LICENSE.html",
+  "scopedRegistries": [
+    {
+      "name": "Studio 23",
+      "url": "https://package.openupm.com",
+      "scopes": [
+        "com.studio23.ss2"
+      ]
+    }
+  ],
+  "dependencies": {
+    "com.unity.nuget.newtonsoft-json": "3.2.1"
+  },
+  "keywords": [
+    "comicstrip",
+    "comic"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Studio-23-xyz/com.studio23.ss2.cutscenesystem.git"
+  },
+  "author": {
+    "name": "Studio 23",
+    "email": "contact@studio-23.xyz",
+    "url": "https://studio-23.xyz"
+  }
+}
