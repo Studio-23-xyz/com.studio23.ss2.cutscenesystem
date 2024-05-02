@@ -22,3 +22,8 @@ All notable changes to this Unity package will be documented in this file.
 
 + Comic pages is now maskable
 + Comic sprite size now can be resizeable
+
+## [v1.0.2] - 2024-05-2
+
++ Fix a timeline bug where timeline data remains whenever timeline restarts.
+
