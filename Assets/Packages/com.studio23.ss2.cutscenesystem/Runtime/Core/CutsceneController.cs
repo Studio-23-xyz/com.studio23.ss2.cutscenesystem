@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Studio23.SS2.Cutscenesystem.Data;
 using UnityEngine;
@@ -12,17 +13,19 @@ namespace Studio23.SS2.Cutscenesystem.Core
         public static CutsceneController instance;
         public PlayableDirector Director;
         private readonly float DampingValue = 0.1f;
-
         private bool _isPaused;
 
-        void Awake()
+        private List<TimelineClip> ActivationClip;
+
+        private void Awake()
         {
             instance = this;
         }
 
 
         /// <summary>
-        /// Used to advance pages, skipcount parameter used to advance to the selected page column if want to skip to that page column
+        ///     Used to advance pages, skipcount parameter used to advance to the selected page column if want to skip to that page
+        ///     column
         /// </summary>
         /// <param name="skipCount"></param>
         public void AdvancePage(int skipCount)
@@ -42,31 +45,37 @@ namespace Studio23.SS2.Cutscenesystem.Core
                 var currentTime = Director.time;
                 var tracks = timeline.GetOutputTracks();
                 var cutSceneTracks = tracks.OfType<CutsceneTrack>().ToList();
+                var activeTracks = tracks.OfType<ActivationTrack>().ToList();
 
-                foreach (var track in cutSceneTracks)
+                foreach (var activeTrack in activeTracks)
                 {
-                    if(track.start > currentTime || track.end < currentTime) continue;
-
+                    if (activeTrack.start > currentTime || activeTrack.end < currentTime) continue;
                     var shouldSkip = false;
-                    var clips = track.GetClips().ToList();
-                    int currentClip = skipCount == -1? clips.Count:skipCount;
-
-                    Director.time = track.end - DampingValue;
+                    ActivationClip = activeTrack.GetClips().ToList();
+                    var currentClip = skipCount == -1 ? ActivationClip.Count : skipCount;
+                    Director.time = activeTrack.end - DampingValue;
                     Director.Evaluate();
                     shouldSkip = true;
-
-
-                    for (int i = 0; i < currentClip; i++)
-                    {
-                        CutsceneClip cut = clips[i].asset as CutsceneClip;
-                        cut.CutsceneBehaviour.ForceAlpha();
-                    }
 
                     if (shouldSkip)
                     {
                         _isPaused = true;
-                        Debug.Log($"Director time now {Director.time} and track duration {track.duration}");
+                        Director.Pause();
+                        Debug.Log($"Director time now {Director.time} and track duration {activeTrack.duration}");
                         break; // Break since we've handled the skip for the active track
+                    }
+                }
+
+                foreach (var track in cutSceneTracks)
+                {
+                    if (track.start > currentTime || track.end < currentTime) continue;
+                    var clips = track.GetClips().ToList();
+                    var currentClip = skipCount == -1 ? clips.Count : skipCount;
+
+                    for (var i = 0; i < currentClip; i++)
+                    {
+                        var cut = clips[i].asset as CutsceneClip;
+                        if (cut != null) cut.CutsceneBehaviour.ForceAlpha();
                     }
                 }
             }

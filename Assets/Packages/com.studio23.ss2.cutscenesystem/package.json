@@ -1,6 +1,6 @@
 {
   "name": "com.studio23.ss2.cutscenesystem",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "displayName": "com.studio23.ss2.cutscenesystem",
   "description": "Cutscenesystem is a utility package where cutscene will display using comic strip style. Unity timeline is being used for the system\r",
   "unity": "2022.3",

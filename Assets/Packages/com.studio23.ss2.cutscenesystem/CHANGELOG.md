@@ -27,3 +27,6 @@ All notable changes to this Unity package will be documented in this file.
 
 + Fix a timeline bug where timeline data remains whenever timeline restarts.
 
+## [v1.0.3] - 2024-05-2
+
++ Cutscene now can be skipped based on timelinetrack
