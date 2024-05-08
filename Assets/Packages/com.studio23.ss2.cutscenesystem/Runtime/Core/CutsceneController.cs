@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Studio23.SS2.Cutscenesystem.Data;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 
@@ -16,6 +17,9 @@ namespace Studio23.SS2.Cutscenesystem.Core
         private bool _isPaused;
 
         private List<TimelineClip> ActivationClip;
+
+        public UnityEvent OnPageAdvance;
+        public UnityEvent OnPageSkip;
 
         private void Awake()
         {
@@ -60,6 +64,7 @@ namespace Studio23.SS2.Cutscenesystem.Core
                     if (shouldSkip)
                     {
                         _isPaused = true;
+                        OnPageAdvance?.Invoke();
                         Director.Pause();
                         Debug.Log($"Director time now {Director.time} and track duration {activeTrack.duration}");
                         break; // Break since we've handled the skip for the active track
@@ -90,6 +95,7 @@ namespace Studio23.SS2.Cutscenesystem.Core
             if (timelineAsset != null)
             {
                 var markers = timelineAsset.markerTrack.GetMarkers().ToArray();
+                OnPageSkip?.Invoke();
                 Director.time = timelineAsset.duration;
             }
         }
