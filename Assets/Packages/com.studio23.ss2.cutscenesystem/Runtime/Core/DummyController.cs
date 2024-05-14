@@ -10,7 +10,7 @@ public class DummyController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space)) // Assuming space bar is the skip key
         {
-            CutsceneController.instance.AdvancePage(-1);
+           // CutsceneController.instance.AdvancePage(-1);
         }
     }
 }

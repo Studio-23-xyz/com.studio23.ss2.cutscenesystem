@@ -47,9 +47,9 @@ namespace Studio23.SS2.Cutscenesystem.Core
         /// <summary>
         /// Make the remaining pages transparency to Maximum
         /// </summary>
-        public void ForceAlpha()
+        public void ForceAlpha(int value)
         {
-            Page.GetComponent<CanvasGroup>().alpha = 1f;
+            Page.GetComponent<CanvasGroup>().alpha = value;
         }
 
     }
