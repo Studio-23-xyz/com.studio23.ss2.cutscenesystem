@@ -31,6 +31,10 @@ All notable changes to this Unity package will be documented in this file.
 
 + Cutscene now can be skipped based on timelinetrack
 
-## [v1.0.3] - 2024-05-2
+## [v1.0.4] - 2024-05-22
 
 + New two events added for Cutscene Advance and Cutscene Skip 
+
+## [v1.0.5] - 2024-6-3
+
++ Remove dependency of Cutscene pause whenever Cutscene is advancing next

@@ -34,43 +34,26 @@ namespace Studio23.SS2.Cutscenesystem.Core
         /// <param name="skipCount"></param>
         public void AdvancePage(int skipCount)
         {
-            if (_isPaused)
+            // Access the timeline asset from the director
+            var timeline = Director.playableAsset as TimelineAsset;
+            if (timeline == null) return;
+
+            var currentTime = Director.time;
+            var tracks = timeline.GetOutputTracks();
+            var cutSceneTracks = tracks.OfType<CutsceneTrack>().ToList();
+            var activeTracks = tracks.OfType<ActivationTrack>().ToList();
+
+            foreach (var activeTrack in activeTracks)
             {
-                Director.Play();
-                _isPaused = false;
-                Debug.Log("Timeline resumed");
-            }
-            else
-            {
-                // Access the timeline asset from the director
-                var timeline = Director.playableAsset as TimelineAsset;
-                if (timeline == null) return;
-
-                var currentTime = Director.time;
-                var tracks = timeline.GetOutputTracks();
-                var cutSceneTracks = tracks.OfType<CutsceneTrack>().ToList();
-                var activeTracks = tracks.OfType<ActivationTrack>().ToList();
-
-                foreach (var activeTrack in activeTracks)
-                {
-                    if (activeTrack.start > currentTime || activeTrack.end < currentTime) continue;
-                    var shouldSkip = false;
-                    ActivationClip = activeTrack.GetClips().ToList();
-                    var currentClip = skipCount == -1 ? ActivationClip.Count : skipCount;
-                    Director.time = activeTrack.end - DampingValue;
-                    Director.Evaluate();
-                    shouldSkip = true;
-
-                    if (shouldSkip)
-                    {
-                        _isPaused = true;
-                        OnPageAdvance?.Invoke();
-                        Director.Pause();
-                        Debug.Log($"Director time now {Director.time} and track duration {activeTrack.duration}");
-                        break; // Break since we've handled the skip for the active track
-                    }
-                }
-
+                if (activeTrack.start > currentTime || activeTrack.end < currentTime) continue;
+                var shouldSkip = false;
+                ActivationClip = activeTrack.GetClips().ToList();
+                var Clip = skipCount == -1 ? ActivationClip.Count : skipCount;
+                Director.time = activeTrack.end - DampingValue;
+                Director.Evaluate();
+                shouldSkip = true;
+                OnPageAdvance?.Invoke();
+               
                 foreach (var track in cutSceneTracks)
                 {
                     if (track.start > currentTime || track.end < currentTime) continue;
