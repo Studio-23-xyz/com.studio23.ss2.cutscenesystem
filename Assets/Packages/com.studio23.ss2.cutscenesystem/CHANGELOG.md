@@ -38,3 +38,8 @@ All notable changes to this Unity package will be documented in this file.
 ## [v1.0.5] - 2024-6-3
 
 + Remove dependency of Cutscene pause whenever Cutscene is advancing next
+
+## [v1.0.6] - 2024-6-11
+
++ Updated documentation for more better understanding
++ Updated package naming

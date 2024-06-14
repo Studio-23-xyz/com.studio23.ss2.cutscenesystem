@@ -38,4 +38,13 @@ https://github.com/Studio-23-xyz/com.studio23.ss2.cutscenesystem.git#upm
 
 8. Sample scene can be helpful for understanding better. 
 
+### Scene Setup
+
+1. Each template prefab contains Cutscene Controller class, where OnPageAdvance, OnPageSkip two events expose.
+
+2. OnPageAdvance event will trigger after a segments of Comicsprite is shown.
+
+3. OnPageSkip event will trigger after whole segments of Cutscene page is loaded.
+
+
 
