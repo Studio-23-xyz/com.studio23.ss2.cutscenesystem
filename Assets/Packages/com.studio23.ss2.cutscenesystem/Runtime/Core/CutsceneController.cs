@@ -35,34 +35,32 @@ namespace Studio23.SS2.Cutscenesystem.Core
         public void AdvancePage(int skipCount)
         {
             // Access the timeline asset from the director
-            var timeline = Director.playableAsset as TimelineAsset;
+            TimelineAsset timeline = Director.playableAsset as TimelineAsset;
             if (timeline == null) return;
 
-            var currentTime = Director.time;
-            var tracks = timeline.GetOutputTracks();
-            var cutSceneTracks = tracks.OfType<CutsceneTrack>().ToList();
-            var activeTracks = tracks.OfType<ActivationTrack>().ToList();
+            double currentTime = Director.time;
+            IEnumerable<TrackAsset> tracks = timeline.GetOutputTracks();
+            List<CutsceneTrack> cutSceneTracks = tracks.OfType<CutsceneTrack>().ToList();
+            List<ActivationTrack> activeTracks = tracks.OfType<ActivationTrack>().ToList();
 
-            foreach (var activeTrack in activeTracks)
+            foreach (ActivationTrack activeTrack in activeTracks)
             {
                 if (activeTrack.start > currentTime || activeTrack.end < currentTime) continue;
-                var shouldSkip = false;
                 ActivationClip = activeTrack.GetClips().ToList();
-                var Clip = skipCount == -1 ? ActivationClip.Count : skipCount;
+                int clip = skipCount == -1 ? ActivationClip.Count : skipCount;
                 Director.time = activeTrack.end - DampingValue;
                 Director.Evaluate();
-                shouldSkip = true;
                 OnPageAdvance?.Invoke();
                
-                foreach (var track in cutSceneTracks)
+                foreach (CutsceneTrack track in cutSceneTracks)
                 {
                     if (track.start > currentTime || track.end < currentTime) continue;
-                    var clips = track.GetClips().ToList();
-                    var currentClip = skipCount == -1 ? clips.Count : skipCount;
+                    List<TimelineClip> clips = track.GetClips().ToList();
+                    int currentClip = skipCount == -1 ? clips.Count : skipCount;
 
-                    for (var i = 0; i < currentClip; i++)
+                    for (int i = 0; i < currentClip; i++)
                     {
-                        var cut = clips[i].asset as CutsceneClip;
+                        CutsceneClip cut = clips[i].asset as CutsceneClip;
                         if (cut != null) cut.CutsceneBehaviour.ForceAlpha();
                     }
                 }
@@ -74,10 +72,10 @@ namespace Studio23.SS2.Cutscenesystem.Core
         /// </summary>
         public void SkipPage()
         {
-            var timelineAsset = Director.playableAsset as TimelineAsset;
+            TimelineAsset timelineAsset = Director.playableAsset as TimelineAsset;
             if (timelineAsset != null)
             {
-                var markers = timelineAsset.markerTrack.GetMarkers().ToArray();
+                IMarker[] markers = timelineAsset.markerTrack.GetMarkers().ToArray();
                 OnPageSkip?.Invoke();
                 Director.time = timelineAsset.duration;
             }

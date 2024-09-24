@@ -52,6 +52,10 @@ namespace Studio23.SS2.Cutscenesystem.Core
             Page.GetComponent<CanvasGroup>().alpha = 1f;
         }
 
+        public void ResetAlpha()
+        {
+            Page.GetComponent<CanvasGroup>().alpha = 0f;
+        }
     }
 
 }

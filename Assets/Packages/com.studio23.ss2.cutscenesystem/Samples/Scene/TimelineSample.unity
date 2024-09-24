@@ -1519,6 +1519,7 @@ GameObject:
   - component: {fileID: 1431064828}
   - component: {fileID: 1431064829}
   - component: {fileID: 1431064830}
+  - component: {fileID: 1431064831}
   m_Layer: 0
   m_Name: CutsceneTimeline
   m_TagString: Untagged
@@ -1606,6 +1607,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8012e6d9d7148948a9b686a153c9cb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1431064831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1431064827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e72545b0232730742ad528fa46917e50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Director: {fileID: 1431064829}
 --- !u!1 &1498358988
 GameObject:
   m_ObjectHideFlags: 0

@@ -43,3 +43,7 @@ All notable changes to this Unity package will be documented in this file.
 
 + Updated documentation for more better understanding
 + Updated package naming
+
+## [v1.0.7] - 2024-9-24
+
++ Refactored Cutscenecontroller class 
